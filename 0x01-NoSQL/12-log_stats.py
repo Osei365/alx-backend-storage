@@ -12,7 +12,11 @@ if __name__ == "__main__":
     print('\tmethod GET: {}'.format(col.count_documents({'method': 'GET'})))
     print('\tmethod POST: {}'.format(col.count_documents({'method': 'POST'})))
     print('\tmethod PUT: {}'.format(col.count_documents({'method': 'PUT'})))
-    print('\tmethod PATCH: {}'.format(col.count_documents({'method': 'PATCH'})))
-    print('\tmethod DELETE: {}'.format(col.count_documents({'method': 'DELETE'})))
+    print('\tmethod PATCH: {}'.format(col.count_documents(
+        {'method': 'PATCH'}
+    )))
+    print('\tmethod DELETE: {}'.format(col.count_documents(
+        {'method': 'DELETE'}
+    )))
     print('{} status check'.format(col.count_documents({'method': 'GET',
                                                         'path': '/status'})))
