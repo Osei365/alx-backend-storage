@@ -9,6 +9,7 @@ from typing import Callable
 
 client = redis.Redis()
 
+
 def getpage_deco(func: Callable) -> Callable:
     '''decorates the get_page.'''
     @wraps(func)
