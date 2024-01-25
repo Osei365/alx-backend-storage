@@ -13,7 +13,7 @@ def count_calls(f: Callable) -> Callable:
     def wrapper(self, *args, **kwargs):
         '''wrapper for the function.'''
         if isinstance(self._redis, redis.Redis):
-            self._redis.incr(f.__qualname__, 1)
+            self._redis.incr(f.__qualname__)
         return f(self, *args, **kwargs)
     return wrapper
 
