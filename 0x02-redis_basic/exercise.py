@@ -7,6 +7,18 @@ from functools import wraps
 from typing import Union, Callable, Any
 
 
+def call_history(method: Callable) -> Callable:
+    '''uses rpush to save history'''
+    @wraps(method)
+    def wrapper(self, *args, **kwargs) -> Any:
+        '''wraps decorated function.'''
+        self._redis.rpush(method.__qualname__ + ':inputs', str(args))
+        output = method(self, *args, **kwargs)
+        self._redis.rpush(method.__qualname__ + ':outputs', output)
+        return method(self, *args, **kwargs)
+    return wrapper
+
+
 def count_calls(method: Callable) -> Callable:
     '''Tracks the number of calls made to a method in a Cache class.
     '''
@@ -28,6 +40,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         '''stores data in redis.'''
