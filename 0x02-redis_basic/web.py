@@ -7,12 +7,14 @@ from functools import wraps
 from typing import Callable
 
 
+client = redis.Redis()
+
+
 def getpage_deco(func: Callable) -> Callable:
     '''decorates the get_page.'''
     @wraps(func)
     def wrapper(url) -> str:
         '''gets number of times url is accessed'''
-        client = redis.Redis()
         client.incr(f'count:{url}')
         cache = client.get(f'{url}')
         if cache:
