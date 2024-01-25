@@ -36,10 +36,13 @@ def replay(method: Callable) -> None:
     cache = method.__self__
     ntimes = cache.get_int(method.__qualname__)
     print('Cache.store was called {} times:'.format(ntimes))
-    inputs = cache._redis.lrange("{}:inputs".format(method.__qualname__), 0, -1)
-    outputs = cache._redis.lrange("{}:outputs".format(method.__qualname__), 0, -1)
+    inputs = cache._redis.lrange("{}:inputs".format(method.__qualname__), 
+                                 0, -1)
+    outputs = cache._redis.lrange("{}:outputs".format(method.__qualname__), 
+                                  0, -1)
     for i, o in zip(inputs, outputs):
-        print("Cache.store(*('{}',)) -> {}".format(i.decode("utf-8"), o.decode("utf-8")))
+        print("Cache.store(*('{}',)) -> {}".format(i.decode("utf-8"), 
+                                                   o.decode("utf-8")))
 
 
 class Cache:
