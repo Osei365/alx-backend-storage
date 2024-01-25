@@ -4,13 +4,13 @@
 import uuid
 import redis
 from functools import wraps
-from typing import Union, Callable
+from typing import Union, Callable, Any
 
 
 def count_calls(f: Callable) -> Callable:
     '''decorator.'''
     @wraps(f)
-    def wrapper(self, *args, **kwargs):
+    def wrapper(self, *args, **kwargs) -> Any:
         '''wrapper for the function.'''
         if isinstance(self._redis, redis.Redis):
             self._redis.incr(f.__qualname__)
