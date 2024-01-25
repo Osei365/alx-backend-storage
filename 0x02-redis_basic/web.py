@@ -13,7 +13,7 @@ client = redis.Redis()
 def getpage_deco(func: Callable) -> Callable:
     '''decorates the get_page.'''
     @wraps(func)
-    def wrapper(url: str) -> str:
+    def wrapper(url) -> str:
         '''wraps itself around func.'''
         client.incr(f"count:{url}")
         result = client.get(f"result:{url}")
