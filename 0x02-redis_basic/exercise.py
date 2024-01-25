@@ -33,12 +33,10 @@ class Cache:
 
         return key
 
-    def get(self, key: str, fn: Callable) -> Union[str, bytes, int, float]:
+    def get(self, key: str, fn: Callable=None) -> Union[str, bytes, int, float]:
         '''converts redis result to desired result.'''
         data = self._redis.get(key)
-        if fn is None:
-            return data
-        return fn(data)
+        return fn(data) if fn is not None else data
 
     def get_str(self, key: str) -> str:
         '''gets a str from a key.'''
@@ -46,4 +44,4 @@ class Cache:
 
     def get_int(self, key: str) -> int:
         ''' gets an int from a key.'''
-        return self.get(key, int)
+        return self.get(key, lambda x: int(x))
