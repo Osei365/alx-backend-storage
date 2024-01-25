@@ -7,7 +7,7 @@ from functools import wraps
 from typing import Callable
 
 
-client = redis.Redis()
+redis_store = redis.Redis()
 
 
 def data_cacher(method: Callable) -> Callable:
