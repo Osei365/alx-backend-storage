@@ -7,27 +7,23 @@ from functools import wraps
 from typing import Callable
 
 
-redis_store = redis.Redis()
 
-
-def data_cacher(method: Callable) -> Callable:
-    '''Caches the output of fetched data.
-    '''
-    @wraps(method)
-    def invoker(url) -> str:
-        '''The wrapper function for caching the output.
-        '''
-        redis_store.incr(f'count:{url}')
-        result = redis_store.get(f'result:{url}')
-        if result:
-            return result.decode('utf-8')
-        result = method(url)
-        redis_store.set(f'count:{url}', 0)
-        redis_store.setex(f'result:{url}', 10, result)
+def getpage_deco(func: Callable) -> Callable:
+    '''decorates the get_page.'''
+    @wraps(func)
+    def wrapper(url) -> str:
+        '''wraps itself around func.'''
+        client = redis.Redis()
+        client.incr(f"count:{url}")
+        cache = client.get(f"result:{url}")
+        if cache:
+            return cache.decode('utf-8')
+        result = func(url)
+        client.set(f"result:{url}", 10, result)
         return result
-    return invoker
+    return wrapper
 
-@data_catcher
+@getpage_deco
 def get_page(url: str) -> str:
     '''tracks number of times a url is accessed'''
     return requests.get(url).text
