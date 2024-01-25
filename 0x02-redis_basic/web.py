@@ -11,14 +11,14 @@ def getpage_deco(func: Callable) -> Callable:
     '''decorates the get_page.'''
     @wraps(func)
     def wrapper(url) -> str:
-        '''wraps itself around func.'''
+        '''gets number of times url is accessed'''
         client = redis.Redis()
-        client.incr(f"count:{url}")
-        cache = client.get(f"{url}")
+        client.incr(f'count:{url}')
+        cache = client.get(f'{url}')
         if cache:
             return cache.decode('utf-8')
         result = func(url)
-        client.set(f"{url}", result, 10)
+        client.set(f'{url}', result, 10)
         return result
     return wrapper
 
