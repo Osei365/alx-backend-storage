@@ -7,15 +7,17 @@ from functools import wraps
 from typing import Union, Callable, Any
 
 
-def count_calls(f: Callable) -> Callable:
-    '''decorator.'''
-    @wraps(f)
-    def wrapper(self, *args, **kwargs) -> Any:
-        '''wrapper for the function.'''
+def count_calls(method: Callable) -> Callable:
+    '''Tracks the number of calls made to a method in a Cache class.
+    '''
+    @wraps(method)
+    def invoker(self, *args, **kwargs) -> Any:
+        '''Invokes the given method after incrementing its call counter.
+        '''
         if isinstance(self._redis, redis.Redis):
-            self._redis.incr(f.__qualname__)
-        return f(self, *args, **kwargs)
-    return wrapper
+            self._redis.incr(method.__qualname__)
+        return method(self, *args, **kwargs)
+    return invoker
 
 
 class Cache:
