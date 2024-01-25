@@ -35,15 +35,17 @@ def count_calls(method: Callable) -> Callable:
 def replay(method: Callable) -> None:
     '''displays content about a method.'''
     cache = method.__self__
+    name = method.__qualname__
     ntimes = cache.get_int(method.__qualname__)
-    print('{} was called {} times:'.format(method.__qualname__, ntimes))
-    inputs = cache._redis.lrange("{}:inputs".format(method.__qualname__),
+    print('{} was called {} times:'.format(name, ntimes))
+    inputs = cache._redis.lrange("{}:inputs".format(name),
                                  0, -1)
-    outputs = cache._redis.lrange("{}:outputs".format(method.__qualname__),
+    outputs = cache._redis.lrange("{}:outputs".format(name),
                                   0, -1)
     for i, o in zip(inputs, outputs):
-        print("Cache.store(*('{}',)) -> {}".format(i.decode("utf-8"),
-                                                   o.decode("utf-8")))
+        print("{}(*('{}',)) -> {}".format(name,
+                                          i.decode("utf-8"),
+                                          o.decode("utf-8")))
 
 
 class Cache:
