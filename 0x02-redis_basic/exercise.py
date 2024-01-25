@@ -43,7 +43,7 @@ def replay(method: Callable) -> None:
     outputs = cache._redis.lrange("{}:outputs".format(name),
                                   0, -1)
     for i, o in zip(inputs, outputs):
-        print("{}(*('{}',)) -> {}".format(name,
+        print("{}(*{}) -> {}".format(name,
                                           i.decode("utf-8"),
                                           o.decode("utf-8")))
 
