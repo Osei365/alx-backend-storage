@@ -19,7 +19,7 @@ def getpage_deco(func: Callable) -> Callable:
         if cache:
             return cache.decode('utf-8')
         result = func(url)
-        client.set(f"result:{url}", 10, result)
+        client.set(f"result:{url}", result, 10)
         return result
     return wrapper
 
