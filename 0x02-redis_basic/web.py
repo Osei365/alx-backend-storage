@@ -7,7 +7,6 @@ from functools import wraps
 from typing import Callable
 
 
-
 def getpage_deco(func: Callable) -> Callable:
     '''decorates the get_page.'''
     @wraps(func)
@@ -22,6 +21,7 @@ def getpage_deco(func: Callable) -> Callable:
         client.set(f"{url}", result, 10)
         return result
     return wrapper
+
 
 @getpage_deco
 def get_page(url: str) -> str:
